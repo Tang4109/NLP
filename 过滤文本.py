@@ -6,4 +6,6 @@
 @FileName: 过滤文本.py
 @Software: PyCharm
 '''
+def unusual_words(text):
+    text_vocab=set(w.lower() for w in text if w.isalpha())
 
