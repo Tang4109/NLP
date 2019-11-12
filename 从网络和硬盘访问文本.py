@@ -30,5 +30,9 @@ print(type(tokens))
 print(len(tokens))
 print(tokens[:10])
 
+text=nltk.Text(tokens)
+print(type(text))
+print(text[1020:1060])
+
 
 
