@@ -27,11 +27,11 @@ tokens = nltk.word_tokenize(text)
 # print(type(tokens))
 # 4.选择感兴趣的标识符
 token = tokens[10:50]
-# print(token)
+print(token)
 
 # 5.转换为nltk.Text对象
 text_nltk = nltk.Text(token)
-# print(text_nltk)
+print(text_nltk)
 
 # 6.将所有词汇小写并提取词汇表
 words = [w.lower() for w in text_nltk]

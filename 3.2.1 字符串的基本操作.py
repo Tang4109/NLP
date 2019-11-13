@@ -20,3 +20,26 @@ a = [1, 2, 3, 4, 5, 6, 7, 6, 5, 4, 3, 2, 1]
 b = [' ' * 2 * (7 - i) + 'love' * i for i in a]
 for line in b:
     print(line)
+
+# 3.小栗子,不要再行尾输出换行符
+sent = 'zyj is a handsome boy.'
+for char in sent:
+    print(char, end=' ')
+print('\n//////////////////////////////////////////')
+# 4.小栗子，小写
+from nltk.corpus import gutenberg
+
+raw = gutenberg.raw('melville-moby_dick.txt')
+fdist = nltk.FreqDist(ch.lower() for ch in raw if ch.isalpha())
+# fdist.plot()
+print(fdist.keys())
+
+# 5.in,find,join操作符
+print('\n//////////////////////////////////////////')
+phrase = 'it is a good thing,or something that is interesting.'
+if 'thing' in phrase:
+    print('found thing')
+pos = phrase.find('thing')
+print(pos)
+print(phrase.join(','))
+
