@@ -14,3 +14,9 @@ couplet = '''zyj is a handsome boy.
 But zrf not!
 Yes,I agree.'''
 print(couplet)
+
+# 2.小栗子
+a = [1, 2, 3, 4, 5, 6, 7, 6, 5, 4, 3, 2, 1]
+b = [' ' * 2 * (7 - i) + 'love' * i for i in a]
+for line in b:
+    print(line)
