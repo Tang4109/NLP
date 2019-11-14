@@ -45,3 +45,59 @@ print('///////////////////////////////////////////////')
 cv_word_pairs = [(cv, w) for w in rotokas_words for cv in re.findall(r'[ptksvr][aeiou]', w)]
 cv_index = nltk.Index(cv_word_pairs)
 print(cv_index['ka'])
+
+# 5.查找词干
+print('///////////////////////////////////////////////')
+
+# 直接去掉任何看起来像后缀的字符
+# def stem(word):
+#     for suffix in ['ing', 'ly', 'ed', 'ious', 'ies', 'ive', 'es', 's', 'ment']:
+#         if word.endswith(suffix):
+#             return word[:-len(suffix)]
+
+# 使用正则表达式的方法
+x3 = re.findall(r'^(.*?)(ing|ly|ed|ious|ies|ive|es|s|ment)?$', 'language')
+print(x3)
+
+
+# 重新定义词干函数
+def stem(word):
+    regexp = r'^(.*?)(ing|ly|ed|ious|ies|ive|es|s|ment)?$'
+    stem, suffix = re.findall(regexp, word)[0]
+    return stem
+
+
+raw = '''it is a good thing,I think we should do it now.
+dilicious freshing fucking business.
+'''
+tokens = nltk.word_tokenize(raw)
+print(tokens)
+
+x4 = [stem(t) for t in tokens]
+print(x4)
+
+# 6.搜索已分词文本
+print('//////////////////////////////////////////////////')
+from nltk.corpus import gutenberg, nps_chat
+
+moby = nltk.Text(gutenberg.words('melville-moby_dick.txt'))
+x5 = moby.findall(r'<a> (<.*>) <man>')  # 括号()使得只匹配词而不匹配短语
+print(x5)
+print('///////////////////////////////////////////////////')
+chat = nltk.Text(nps_chat.words())
+x6 = chat.findall(r'<.*> <.*> <bro>')
+print(x6)
+print('//////////////////////////////////////////////////')
+x7 = chat.findall(r'<l.*>{3,}')
+print(x7)
+
+# 小栗子
+print('//////////////////////////////////////////////////')
+from nltk.corpus import brown
+
+hobbies_learned = nltk.Text(brown.words(categories=['hobbies', 'learned']))
+x8 = hobbies_learned.findall(r'<\w*> <and> <other> <\w*s>')
+print(x8)
+
+x9 = hobbies_learned.findall(r' <as> <\w*> <as> <\w*>')
+print(x9)
