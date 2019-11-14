@@ -64,9 +64,8 @@ class IndexedText(object):
             print(rcontext)
             ldisplay = '%*s' % (width, lcontext[-width:])
             rdisplay = '%-*s' % (width, rcontext[:width])
-            print('///////////////////////////////////////')
             print(ldisplay, rdisplay)
-            print('///////////////////////////////////////')
+            print('//////////////////////////////////////')
 
     def _stem(self, word):
         return self._stemmer.stem(word).lower()
@@ -76,3 +75,8 @@ porter = nltk.PorterStemmer()
 grail = nltk.corpus.webtext.words('grail.txt')
 text = IndexedText(porter, grail)
 text.concordance('lie')
+
+# 4.WordNet词形归并器
+wnl = nltk.WordNetLemmatizer()
+x2 = [wnl.lemmatize(t) for t in tokens]
+print(x2)
