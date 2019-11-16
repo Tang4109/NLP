@@ -77,7 +77,21 @@ tabulate(cfd, modals, genres)
 
 # 5.将结果写入文件
 print('//////////////////////////////////////////////////////')
-output_file=open('output.txt','w')
-words=sorted(set(nltk.corpus.genesis.words('english-kjv.txt')))
+output_file = open('output.txt', 'w')
+words = sorted(set(nltk.corpus.genesis.words('english-kjv.txt')))
 for word in words:
-    output_file.write(word+' ')
+    output_file.write(word + ' ')
+# 把总词数写入文件
+output_file.write(str(len(words)))
+
+# 5.文本换行
+print('/////////////////////////////////')
+saying = ['i', 'am', 'a', 'good', 'boy']
+from textwrap import fill
+
+format = '%s (%d),'
+pieces = [format % (word, len(word)) for word in saying]
+print(pieces)
+output = ' '.join(pieces)
+wrapped = fill(output)
+print(wrapped)
