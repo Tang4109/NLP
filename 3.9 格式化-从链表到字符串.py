@@ -53,15 +53,18 @@ print(x4)
 print('////////////////////////////////////////////')
 
 
+# 4.数据制表
 def tabulate(cfdist, words, categories):
-    print('%-16s' % 'category')
+    width_word = max(len(w) for w in words)
+    width_category = max(len(w) for w in categories)
+    print('%-*s' % (width_category, 'category'), end=' ')
     for word in words:
-        print('%6s' % word)
+        print('%*s' % (width_word, word), end=' ')
     print()
     for category in categories:
-        print('%-16s' % category, )  # row heading
+        print('%-*s' % (width_category, category), end=' ')  # row heading
         for word in words:  # for each word
-            print('%6d' % cfdist[category][word], )  # print table cell
+            print('%*d' % (width_word, cfdist[category][word]), end=' ')  # print table cell
         print()
 
 
@@ -71,3 +74,10 @@ cfd = nltk.ConditionalFreqDist((genre, word) for genre in brown.categories() for
 genres = ['news', 'religion', 'hobbies', 'science_fiction', 'romance', 'humor']
 modals = ['can', 'could', 'may', 'might', 'must', 'will']
 tabulate(cfd, modals, genres)
+
+# 5.将结果写入文件
+print('//////////////////////////////////////////////////////')
+output_file=open('output.txt','w')
+words=sorted(set(nltk.corpus.genesis.words('english-kjv.txt')))
+for word in words:
+    output_file.write(word+' ')
