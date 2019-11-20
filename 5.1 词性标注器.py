@@ -3,7 +3,7 @@
  _*_coding:utf-8 _*_
 @Time    :2019/11/19 21:43
 @Author  :Zhangyunjia
-@FileName: 5.1 词性标准器.py
+@FileName: 5.1 词性标注器.py
 @Software: PyCharm
 '''
 from __future__ import division
