@@ -161,9 +161,10 @@ classifier5.show_most_informative_features(5)
 # 找出最常见的后缀
 print('\n找出最常见的后缀:')
 from nltk.corpus import brown
-suffix_fdist=nltk.FreqDist()
+
+suffix_fdist = nltk.FreqDist()
 for word in brown.words():
-    word=word.lower()
+    word = word.lower()
     suffix_fdist[word[-1:]] += 1
     suffix_fdist[word[-2:]] += 1
     suffix_fdist[word[-3:]] += 1
@@ -171,4 +172,105 @@ for word in brown.words():
 # print(suffix_fdist.keys())
 suffix_fdist_items = sorted(suffix_fdist.items(), key=itemgetter(1), reverse=True)[:100]
 common_suffixes = [word[0] for word in suffix_fdist_items]
-print('common_suffixes: ',common_suffixes)
+print('common_suffixes: ', common_suffixes)
+
+
+# 特征提取器函数
+def pos_features(word):
+    features = {}
+    for suffix in common_suffixes:
+        features['endswith(%s)' % suffix] = word.lower().endswith(suffix)
+    return features
+
+
+tagged_words = brown.tagged_words(categories='news')[:2000]
+print('tagged_words: ', tagged_words)
+featuresets_pos = [(pos_features(n), g) for (n, g) in tagged_words]
+size = int(len(featuresets_pos) * 0.1)
+print('size: ', size)
+train_set_pos, test_set_pos = featuresets_pos[size:], featuresets_pos[:size]
+classifier_pos = nltk.DecisionTreeClassifier.train(train_set_pos)
+score_pos = nltk.classify.accuracy(classifier_pos, test_set_pos)
+print('score: ', score_pos)
+print(classifier_pos.classify(pos_features('cats')))
+
+
+# 7.探索上下文语境
+
+def pos_features2(sentence, i):
+    features = {'suffix(1)': sentence[i][-1:],
+                'suffix(2)': sentence[i][-2:],
+                'suffix(3)': sentence[i][-3:]}
+    if i == 0:
+        features['prev-word'] = '<START>'
+    else:
+        features['prev-word'] = sentence[i - 1]
+    return features
+
+
+# print(pos_features2(brown.sents()[0], 8))
+tagged_sents = brown.tagged_sents(categories='news')
+print('tagged_sents: ', tagged_sents)
+print('len(tagged_sents): ', len(tagged_sents))
+featuresets7 = []
+for tagged_sent in tagged_sents:
+    untagged_sent = nltk.tag.untag(tagged_sent)
+    # print('untagged_sent: ',untagged_sent)
+    for i, (word, tag) in enumerate(tagged_sent):
+        # print(i,word,tag)
+        featuresets7.append((pos_features2(untagged_sent, i), tag))
+
+print('len(featuresets): ', len(featuresets7))
+# 训练集的大小
+size7 = int(len(featuresets7) * 0.1)
+train_set7, test_set7 = featuresets7[size7:], featuresets7[:size7]
+classifier7 = nltk.DecisionTreeClassifier.train(train_set7)
+
+score7 = nltk.classify.accuracy(classifier7, test_set7)
+print('词性分类器得分score7： ', score7)
+
+
+# 8.序列分类
+# 使用连续分类器进行词性标注
+def pos_features8(sentence, i, history):
+    features = {'suffix(1)': sentence[i][-1:],
+                'suffix(2)': sentence[i][-2:],
+                'suffix(3)': sentence[i][-3:]}
+    if i == 0:
+        features['prev-word'] = '<START>'
+        features['prev-tag'] = '<START>'
+    else:
+        features['prev-word'] = sentence[i - 1]
+        features['prev-tag'] = history[i - 1]
+    return features
+
+
+class ConsecutivePosTagger(nltk.TaggerI):
+    def __init__(self, train_sents):
+        train_set8 = []
+        for tagged_sent in train_sents:
+            untagged_sent = nltk.tag.untag(tagged_sent)
+            history = []
+            for i, (word, tag) in enumerate(tagged_sent):
+                featureset8 = pos_features8(untagged_sent, i, history)
+                train_set8.append((featureset8, tag))
+                history.append(tag)
+        self.classifier = nltk.NaiveBayesClassifier.train(train_set8)
+
+    def tag(self, sentence):
+        history = []
+        for i, word in enumerate(sentence):
+            featureset8 = pos_features8(sentence, i, history)
+            tag = self.classifier.classify(featureset8)
+            history.append(tag)
+        return zip(sentence, history)
+
+
+tagged_sents8 = brown.tagged_sents(categories='news')
+size8 = int(len(tagged_sents) * 0.1)
+train_sents8, test_sents8 = tagged_sents8[size8:], tagged_sents8[:size8]
+tagger=ConsecutivePosTagger(train_sents8)
+print('score8: ',tagger.evaluate(test_sents8))
+
+
+
