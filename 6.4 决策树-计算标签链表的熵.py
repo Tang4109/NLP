@@ -3,7 +3,7 @@
  _*_coding:utf-8 _*_
 @Time    : 2019/11/26 10:38
 @Author  :Zhangyunjia
-@FileName:  6.4 决策树.py
+@FileName:  6.4 决策树-计算标签链表的熵.py
 @Software: PyCharm
 '''
 import nltk
@@ -27,3 +27,4 @@ def entropy(labels):
 
 entropy_ = entropy(['fmale', 'female', 'male', 'xmale'])
 print('entropy_: ', entropy_)
+#
