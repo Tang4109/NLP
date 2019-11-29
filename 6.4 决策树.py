@@ -11,6 +11,7 @@ import nltk
 import math
 
 
+# 1.计算标签链表的熵
 def entropy(labels):
     freqdist = nltk.FreqDist(labels)
 
@@ -25,4 +26,4 @@ def entropy(labels):
 
 
 entropy_ = entropy(['fmale', 'female', 'male', 'xmale'])
-print('entropy_: ',entropy_)
+print('entropy_: ', entropy_)
