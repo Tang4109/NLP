@@ -27,4 +27,3 @@ def entropy(labels):
 
 entropy_ = entropy(['fmale', 'female', 'male', 'xmale'])
 print('entropy_: ', entropy_)
-#
